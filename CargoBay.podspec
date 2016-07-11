@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.8'
   s.frameworks = 'StoreKit', 'Security'
 
-  s.dependency 'AFNetworking', '~> 2.2'
+  s.dependency 'AFNetworking', '~> 3.0'
 end
