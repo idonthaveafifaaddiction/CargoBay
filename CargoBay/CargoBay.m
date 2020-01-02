@@ -707,7 +707,7 @@ NSDictionary * CBPurchaseInfoFromTransactionReceipt(NSData *transactionReceiptDa
                     failure:(void (^)(NSError *error))failure
 {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager GET:urlRequest.URL.absoluteString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable JSON) {
+    [manager GET:urlRequest.URL.absoluteString parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable JSON) {
         if (JSON && [JSON isKindOfClass:[NSArray class]]) {
             [self productsWithIdentifiers:[NSSet setWithArray:JSON] success:success failure:failure];
         } else {
