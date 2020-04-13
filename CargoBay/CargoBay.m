@@ -914,8 +914,6 @@ NSDictionary * CBPurchaseInfoFromTransactionReceipt(NSData *transactionReceiptDa
                     return credential;
                 }
             }
-            
-            result = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
         } else {
             result = NSURLSessionAuthChallengePerformDefaultHandling;
         }
