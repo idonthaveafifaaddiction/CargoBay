@@ -900,31 +900,27 @@ NSDictionary * CBPurchaseInfoFromTransactionReceipt(NSData *transactionReceiptDa
         }
     }];
 
-    [manager setTaskDidReceiveAuthenticationChallengeBlock:^NSURLSessionAuthChallengeDisposition(NSURLSession * _Nonnull session, NSURLSessionTask * _Nonnull task, NSURLAuthenticationChallenge * _Nonnull challenge, NSURLCredential *__autoreleasing  _Nullable * _Nullable credential) {
+    [manager setAuthenticationChallengeHandler:^id _Nonnull(NSURLSession * _Nonnull session, NSURLSessionTask * _Nonnull task, NSURLAuthenticationChallenge * _Nonnull challenge, void (^ _Nonnull completionHandler)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable)) {
         NSURLSessionAuthChallengeDisposition result = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
         
         if ([[[challenge protectionSpace] authenticationMethod] isEqualToString:NSURLAuthenticationMethodServerTrust]) {
             SecTrustRef trust = [[challenge protectionSpace] serverTrust];
             NSError *error = nil;
             
-            BOOL didUseCredential = NO;
             BOOL isTrusted = CBValidateTrust(trust, &error);
             if (isTrusted) {
                 NSURLCredential *credential = [NSURLCredential credentialForTrust:trust];
                 if (credential) {
-                    result = NSURLSessionAuthChallengeUseCredential;
-                    didUseCredential = YES;
+                    return credential;
                 }
             }
             
-            if (!didUseCredential) {
-                result = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
-            }
+            result = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
         } else {
             result = NSURLSessionAuthChallengePerformDefaultHandling;
         }
         
-        return result;
+        return @(result);
     }];
     
     [task resume];
